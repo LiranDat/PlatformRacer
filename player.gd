@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+var timer = 60
+
 func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("P1Jump"):
@@ -15,4 +17,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _process(delta: float) -> void:
-	pass
+	# timer läuft runter und modifiziert die länge vom balken
+	timer -= 1*delta
+	print(timer)
+	$timer.scale.x = 0.5 * timer / 60
