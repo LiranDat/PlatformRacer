@@ -11,8 +11,16 @@ config_version=5
 [application]
 
 config/name="PlatformRacer"
+run/main_scene="res://test.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[input]
+
+P1Up={
+"deadzone": 0.2,
+"events": []
+}
 
 [rendering]
 
