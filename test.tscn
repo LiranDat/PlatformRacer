@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://h4dooms54yv"]
+[gd_scene load_steps=7 format=3 uid="uid://h4dooms54yv"]
 
 [ext_resource type="PackedScene" uid="uid://dnp6tk7y4p2wg" path="res://platform.tscn" id="1_8uh7m"]
 [ext_resource type="PackedScene" uid="uid://cwgiwnhndwqei" path="res://player.tscn" id="2_6uqi0"]
@@ -15,6 +15,13 @@ background_mode = 2
 sky = SubResource("Sky_6uqi0")
 tonemap_mode = 2
 
+[sub_resource type="Curve3D" id="Curve3D_8uh7m"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 28.235, 0, 0, 0, 0, 0, 18.74, 0, 0, 0, 0, 0, 16.629, -0.083, -65.541),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
 [node name="Node3D" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -24,7 +31,23 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ppyta")
 
-[node name="Platform" parent="." instance=ExtResource("1_8uh7m")]
-
-[node name="Player" parent="." instance=ExtResource("2_6uqi0")]
+[node name="Player" parent="." node_paths=PackedStringArray("movementCamera") instance=ExtResource("2_6uqi0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0736413, 1.5, -0.196745)
+movementCamera = NodePath("../Path3D/PathFollow3D/Platform/Camera3D")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.49442, -8.47773, 33.1106)
+polygon = PackedVector2Array(0, 0, -0.756356, 1.96128, 1.83954, 5.66871, 0.442291, 7.23147, -1.37165, 11.7599, -1.11773, 20.3197, 1.86814, 33.8824, 14.8215, 57.7465, 4.29763, 96.8857, -7.37318, 124.074, 2.28542, 116.931, 20.2757, 58.3669, 14, 48, 7, 32, 2.65444, 18.8053, 2.26217, 11.9152, 4.19916, 6.75074, 2.68746, 4.0557, 1.0344, 1.87463, 1, 0)
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_8uh7m")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+transform = Transform3D(-4.37099e-08, 0, -0.999978, 0, 0.999971, 0, 0.999966, 0, -4.37104e-08, 0, 0, 0)
+tilt_enabled = false
+
+[node name="Platform" parent="Path3D/PathFollow3D" node_paths=PackedStringArray("platformPath") instance=ExtResource("1_8uh7m")]
+transform = Transform3D(1, 0, 0, 0, 1.00001, 0, 0, 0, 1, 0, 0, 0)
+platformPath = NodePath("..")
+
+[editable path="Path3D/PathFollow3D/Platform"]
