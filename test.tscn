@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://h4dooms54yv"]
+[gd_scene load_steps=8 format=3 uid="uid://h4dooms54yv"]
 
 [ext_resource type="PackedScene" uid="uid://dnp6tk7y4p2wg" path="res://platform.tscn" id="1_8uh7m"]
 [ext_resource type="PackedScene" uid="uid://cwgiwnhndwqei" path="res://player.tscn" id="2_6uqi0"]
+[ext_resource type="PackedScene" uid="uid://co6p31phox46n" path="res://launcher.tscn" id="3_6uqi0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8uh7m"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -11,43 +12,73 @@ ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
 sky_material = SubResource("ProceduralSkyMaterial_8uh7m")
 
 [sub_resource type="Environment" id="Environment_ppyta"]
-background_mode = 2
 sky = SubResource("Sky_6uqi0")
 tonemap_mode = 2
 
 [sub_resource type="Curve3D" id="Curve3D_8uh7m"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 28.235, 0, 0, 0, 0, 0, 18.74, 0, 0, 0, 0, 0, 16.629, -0.083, -65.541),
-"tilts": PackedFloat32Array(0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 16.095, 0, 0, -10, 0, 0, 0, 0, 0, 32, 0, 16, 0, 0, 0, 0, 0, 0, 72, 0, 16),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
 }
-point_count = 2
+point_count = 4
 
 [node name="Node3D" type="Node3D"]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+light_color = Color(0.783099, 0.863959, 0.918664, 1)
+light_energy = 0.1
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport"]
 environment = SubResource("Environment_ppyta")
 
-[node name="Player" parent="." node_paths=PackedStringArray("movementCamera") instance=ExtResource("2_6uqi0")]
+[node name="Player" parent="SubViewportContainer/SubViewport" node_paths=PackedStringArray("movementCamera") instance=ExtResource("2_6uqi0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0736413, 1.5, -0.196745)
-movementCamera = NodePath("../Path3D/PathFollow3D/Platform/Camera3D")
+movementCamera = NodePath("../Path3D/Platform/Camera3D")
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.49442, -8.47773, 33.1106)
-polygon = PackedVector2Array(0, 0, -0.756356, 1.96128, 1.83954, 5.66871, 0.442291, 7.23147, -1.37165, 11.7599, -1.11773, 20.3197, 1.86814, 33.8824, 14.8215, 57.7465, 4.29763, 96.8857, -7.37318, 124.074, 2.28542, 116.931, 20.2757, 58.3669, 14, 48, 7, 32, 2.65444, 18.8053, 2.26217, 11.9152, 4.19916, 6.75074, 2.68746, 4.0557, 1.0344, 1.87463, 1, 0)
-
-[node name="Path3D" type="Path3D" parent="."]
+[node name="Path3D" type="Path3D" parent="SubViewportContainer/SubViewport"]
 curve = SubResource("Curve3D_8uh7m")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+[node name="PathFollow3D" type="PathFollow3D" parent="SubViewportContainer/SubViewport/Path3D"]
 transform = Transform3D(-4.37099e-08, 0, -0.999978, 0, 0.999971, 0, 0.999966, 0, -4.37104e-08, 0, 0, 0)
 tilt_enabled = false
 
-[node name="Platform" parent="Path3D/PathFollow3D" node_paths=PackedStringArray("platformPath") instance=ExtResource("1_8uh7m")]
-transform = Transform3D(1, 0, 0, 0, 1.00001, 0, 0, 0, 1, 0, 0, 0)
-platformPath = NodePath("..")
+[node name="PlatformBase" type="Node3D" parent="SubViewportContainer/SubViewport/Path3D/PathFollow3D"]
 
-[editable path="Path3D/PathFollow3D/Platform"]
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="SubViewportContainer/SubViewport/Path3D/PathFollow3D/PlatformBase"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, -3.55271e-15, 0, 1, 0, 0, 0)
+remote_path = NodePath("../../../Platform")
+
+[node name="Platform" parent="SubViewportContainer/SubViewport/Path3D" node_paths=PackedStringArray("platformPath") instance=ExtResource("1_8uh7m")]
+transform = Transform3D(-4.37099e-08, 0, -0.999978, 0, 0.999971, 0, 0.999966, 0, -4.37104e-08, 0, 0, 0)
+platformPath = NodePath("../PathFollow3D")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="SubViewportContainer/SubViewport/StaticBody3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 3, 1, -3)
+use_collision = true
+polygon = PackedVector2Array(0, 0, -2, 2, 2, 2, 4, 0)
+depth = 6.0
+
+[node name="Launcher" parent="." instance=ExtResource("3_6uqi0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1, -4)
+
+[node name="Launcher" parent="Launcher" instance=ExtResource("3_6uqi0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)

@@ -1,23 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://dnp6tk7y4p2wg"]
+[gd_scene load_steps=5 format=3 uid="uid://dnp6tk7y4p2wg"]
 
 [ext_resource type="Script" uid="uid://b7lwabkkejm5t" path="res://platform.gd" id="1_mi635"]
+[ext_resource type="PackedScene" uid="uid://cro14f31ykdoc" path="res://button.tscn" id="2_s8bxr"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5ajho"]
-size = Vector3(6, 1, 2)
+size = Vector3(6, 1, 6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mi635"]
-size = Vector3(6, 1, 2)
+size = Vector3(6, 1, 6)
 
-[node name="Platform" type="Node3D"]
+[node name="Platform" type="AnimatableBody3D"]
 script = ExtResource("1_mi635")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.923518, 0.383554, 0, -0.383554, 0.923518, 0, 7.74553, 11.5891)
+current = true
+fov = 60.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_5ajho")
+skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_mi635")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2056, 5.53435)
+[node name="Button" parent="." instance=ExtResource("2_s8bxr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.498529, 0)
+
+[node name="Button2" parent="." instance=ExtResource("2_s8bxr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.498529, 0)

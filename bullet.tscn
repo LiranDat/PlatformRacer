@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://duasooid5h48u"]
+
+[ext_resource type="Script" uid="uid://chws3smtyjo4m" path="res://bullet.gd" id="1_v7oki"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rtl8c"]
+radius = 0.1
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v7oki"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v8qja"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t4vbm"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v8qja"]
+radius = 0.142484
+height = 0.798971
+
+[node name="Node3D" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.254064)
+mesh = SubResource("CapsuleMesh_rtl8c")
+surface_material_override/0 = SubResource("StandardMaterial3D_v7oki")
+script = ExtResource("1_v7oki")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.255081, 1.11499e-08)
+mesh = SubResource("CylinderMesh_v8qja")
+surface_material_override/0 = SubResource("StandardMaterial3D_t4vbm")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 256
+collision_mask = 256
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.102872, 4.49666e-09)
+shape = SubResource("CapsuleShape3D_v8qja")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2ph8g10jpqnt"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ajlnh"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ajlnh"]
+height = 1.0
+
+[node name="Library" type="Node3D"]
+
+[node name="Block" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ajlnh")
+
+[node name="Corner2" type="CSGPolygon3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0.5, 0.5)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0, 1, 1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+mesh = SubResource("CylinderMesh_ajlnh")

@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://co6p31phox46n"]
+
+[ext_resource type="Script" uid="uid://cyshtjiqncq73" path="res://launcher.gd" id="1_4emaf"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_iex1j"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4emaf"]
+albedo_color = Color(0.099997, 0.0431137, 0.0797921, 1)
+
+[node name="Launcher" type="Node3D"]
+script = ExtResource("1_4emaf")
+bulletSpeed = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_iex1j")
+surface_material_override/0 = SubResource("StandardMaterial3D_4emaf")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="MeshInstance3D"]
+transform = Transform3D(1.91069e-15, -4.37114e-08, -1, -1, -4.37114e-08, 0, -4.37114e-08, 1, -4.37114e-08, -2.30696e-08, -2.30696e-08, 0.527771)
+height = 1.0
+sides = 10
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
